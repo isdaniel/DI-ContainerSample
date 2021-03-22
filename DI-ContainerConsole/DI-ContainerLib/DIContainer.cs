@@ -57,11 +57,17 @@ namespace DI_ContainerLib
             if (serviceType.IsGenericType && 
                 serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
             {
-                var genericArgument = serviceType.GetGenericArguments().FirstOrDefault();
-                if (!_registries.TryGetValue(genericArgument,out registry))
+                var elementType = serviceType.GetGenericArguments().FirstOrDefault();
+                if (!_registries.TryGetValue(elementType,out registry))
                 {
-                    return Array.CreateInstance(genericArgument,0);
+                    return Array.CreateInstance(elementType,0);
                 }
+
+                var services = registry.AsEnumerable().Select(x => GetServiceCore(x, Type.EmptyTypes)).ToArray();
+                var array= Array.CreateInstance(elementType, services.Length);
+                services.CopyTo(array, 0);
+                return array;
+
             }
 
             //Generic

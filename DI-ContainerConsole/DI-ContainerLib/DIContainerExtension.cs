@@ -30,9 +30,12 @@ namespace DI_ContainerLib
         }
 
         public static T Resolve<T>(this DIContainer container)
-            where T:class
         {
-            return container.GetService(typeof(T)) as T;
+            return (T)container.GetService(typeof(T));
+        }
+        public static IEnumerable<T> Resolves<T>(this DIContainer container)
+        {
+            return container.Resolve<IEnumerable<T>>();
         }
 
         private static object Create(DIContainer container, Type type, Type[] genericArguments)

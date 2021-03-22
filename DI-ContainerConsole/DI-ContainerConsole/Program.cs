@@ -31,6 +31,14 @@ namespace DI_ContainerConsole
         }
     }
 
+    public class C
+    {
+        private IEnumerable<Child> _childList;
+        public C(IEnumerable<Child> childList)
+        {
+            this._childList = childList;
+        }
+    }
 
     public class Child : IChild
     {
